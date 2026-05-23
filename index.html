@@ -68,8 +68,10 @@
         .compare-match-info { font-size: 0.8em; color: #aaa; margin-top: 4px; }
         .compare-new { border-left-color: #ffd700; }
 
-        .compare-fab { position: fixed; bottom: 20px; right: 20px; background: #7c3aed; color: #fff; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 1.4em; cursor: pointer; box-shadow: 0 4px 12px rgba(124,58,237,0.4); z-index: 50; }
+        .compare-fab { position: fixed; bottom: 20px; right: 20px; background: #7c3aed; color: #fff; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 1.4em; cursor: pointer; box-shadow: 0 4px 12px rgba(124,58,237,0.4); z-index: 50; display: flex; align-items: center; justify-content: center; }
         .compare-fab:hover { background: #6d28d9; transform: scale(1.05); }
+        #copy-btn { bottom: 84px; background: #2d6a4f; box-shadow: 0 4px 12px rgba(45,106,79,0.4); }
+        #copy-btn:hover { background: #1b4332; }
 
         .stats { text-align: center; padding: 8px; color: #666; font-size: 0.8em; }
 
@@ -113,7 +115,7 @@
     <div class="content" id="content"></div>
 
     <button class="compare-fab" id="compare-btn" title="Confronta una carta">⚡</button>
-    <button class="compare-fab" id="copy-btn" title="Copia / Screenshot" style="bottom:84px;background:#2d6a4f;">📋</button>
+    <button class="compare-fab" id="copy-btn" title="Copia / Screenshot">📋</button>
 
     <div class="modal-overlay" id="copy-modal">
         <div class="modal">
