@@ -72,6 +72,8 @@
         .compare-fab:hover { background: #6d28d9; transform: scale(1.05); }
         #copy-btn { bottom: 84px; background: #2d6a4f; box-shadow: 0 4px 12px rgba(45,106,79,0.4); }
         #copy-btn:hover { background: #1b4332; }
+        #decklist-btn { bottom: 148px; background: #b45309; box-shadow: 0 4px 12px rgba(180,83,9,0.4); }
+        #decklist-btn:hover { background: #92400e; }
 
         .stats { text-align: center; padding: 8px; color: #666; font-size: 0.8em; }
 
@@ -116,6 +118,7 @@
 
     <button class="compare-fab" id="compare-btn" title="Confronta una carta">⚡</button>
     <button class="compare-fab" id="copy-btn" title="Copia / Screenshot">📋</button>
+    <button class="compare-fab" id="decklist-btn" title="Cerca decklist con carta">🔍</button>
 
     <div class="modal-overlay" id="copy-modal">
         <div class="modal">
@@ -125,6 +128,19 @@
             <p id="copy-feedback" style="color:#4ecca3;font-size:0.85em;margin-top:12px;display:none;"></p>
             <br>
             <button class="modal-btn" style="background:#2d2d44;" id="copy-close">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="decklist-modal">
+        <div class="modal">
+            <h2>🔍 Cerca Decklist Competitive</h2>
+            <p style="color:#aaa;font-size:0.85em;margin-bottom:12px;">Inserisci il nome di una carta per trovare liste competitive che la usano</p>
+            <input type="text" id="decklist-input" placeholder="Es: Oath of Druids, Splinter Twin...">
+            <button class="modal-btn" id="decklist-go" style="background:#b45309;margin-bottom:8px;">Cerca su MTGTop8</button>
+            <button class="modal-btn" id="decklist-go2" style="background:#1a4a3a;margin-bottom:8px;">Cerca su MTGDecks</button>
+            <button class="modal-btn" id="decklist-go3" style="background:#1a2d4a;">Cerca su MTGGoldfish</button>
+            <br>
+            <button class="modal-btn" style="background:#2d2d44;margin-top:10px;" id="decklist-close">Chiudi</button>
         </div>
     </div>
 

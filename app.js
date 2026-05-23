@@ -321,6 +321,38 @@ document.addEventListener('mouseout', (e) => {
     }
 });
 
+// === DECKLIST SEARCH ===
+document.getElementById('decklist-btn').addEventListener('click', () => {
+    document.getElementById('decklist-modal').classList.add('active');
+    document.getElementById('decklist-input').focus();
+});
+
+document.getElementById('decklist-close').addEventListener('click', () => {
+    document.getElementById('decklist-modal').classList.remove('active');
+});
+
+document.getElementById('decklist-go').addEventListener('click', () => {
+    const card = document.getElementById('decklist-input').value.trim();
+    if (card) window.open('https://www.mtgtop8.com/search?MD_check=1&SB_check=1&cards=' + encodeURIComponent(card), '_blank');
+});
+
+document.getElementById('decklist-go2').addEventListener('click', () => {
+    const card = document.getElementById('decklist-input').value.trim();
+    if (card) window.open('https://mtgdecks.net/decks/containing/' + encodeURIComponent(card.replace(/ /g, '-').toLowerCase()), '_blank');
+});
+
+document.getElementById('decklist-go3').addEventListener('click', () => {
+    const card = document.getElementById('decklist-input').value.trim();
+    if (card) window.open('https://www.mtggoldfish.com/q?query_string=' + encodeURIComponent(card) + '&commit=Search', '_blank');
+});
+
+document.getElementById('decklist-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const card = document.getElementById('decklist-input').value.trim();
+        if (card) window.open('https://www.mtgtop8.com/search?MD_check=1&SB_check=1&cards=' + encodeURIComponent(card), '_blank');
+    }
+});
+
 // === COPY / SCREENSHOT ===
 document.getElementById('copy-btn').addEventListener('click', () => {
     document.getElementById('copy-modal').classList.add('active');
