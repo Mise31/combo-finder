@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ComboFinder">
+    <meta name="theme-color" content="#7c3aed">
+    <link rel="manifest" href="manifest.json">
+    <title>MTG Combo Finder</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; }
+
+        header { background: #1a1a2e; padding: 16px; text-align: center; border-bottom: 2px solid #7c3aed; }
+        header h1 { color: #7c3aed; font-size: 1.6em; }
+        .subtitle { color: #888; font-size: 0.85em; margin-top: 4px; }
+
+        .tab-bar { display: flex; background: #1a1a2e; border-bottom: 1px solid #2d2d44; }
+        .tab { flex: 1; padding: 12px 8px; text-align: center; cursor: pointer; color: #888; font-size: 0.85em; border-bottom: 3px solid transparent; transition: all 0.2s; }
+        .tab.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+
+        .search-box { padding: 12px; background: #1a1a2e; }
+        .search-box input { width: 100%; padding: 10px 14px; border: 1px solid #2d2d44; border-radius: 8px; background: #0f0f1a; color: #e0e0e0; font-size: 0.95em; }
+        .search-box input:focus { outline: none; border-color: #7c3aed; }
+
+        .content { padding: 12px; max-width: 900px; margin: 0 auto; }
+
+        /* Pattern cards */
+        .pattern-card { background: #1a1a2e; border: 1px solid #2d2d44; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+        .pattern-card:hover { border-color: #7c3aed; }
+        .pattern-name { font-size: 1.1em; font-weight: bold; color: #fff; margin-bottom: 6px; }
+        .pattern-desc { font-size: 0.85em; color: #aaa; margin-bottom: 10px; }
+        .pattern-result { font-size: 0.8em; color: #4ecca3; background: #1a2e2a; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+
+        .slots { display: flex; flex-direction: column; gap: 8px; }
+        .slot { background: #0f0f1a; border-radius: 6px; padding: 8px 10px; }
+        .slot-label { font-size: 0.75em; color: #7c3aed; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }
+        .slot-cards { display: flex; flex-wrap: wrap; gap: 4px; }
+        .slot-card { font-size: 0.8em; background: #2d2d44; padding: 2px 8px; border-radius: 4px; color: #ddd; cursor: pointer; }
+        .slot-card:hover { background: #7c3aed; color: #fff; }
+
+        /* Compare modal */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #1a1a2e; border-radius: 12px; padding: 20px; width: 100%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
+        .modal h2 { color: #7c3aed; margin-bottom: 12px; font-size: 1.2em; }
+        .modal input { width: 100%; padding: 10px; border: 1px solid #2d2d44; border-radius: 8px; background: #0f0f1a; color: #e0e0e0; font-size: 1em; margin-bottom: 12px; }
+        .modal-btn { background: #7c3aed; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em; width: 100%; }
+        .modal-btn:hover { background: #6d28d9; }
+        .modal-close { position: absolute; top: 10px; right: 16px; color: #888; font-size: 1.5em; cursor: pointer; }
+
+        .compare-results { margin-top: 12px; }
+        .compare-match { background: #0f0f1a; border-radius: 8px; padding: 10px; margin-bottom: 8px; border-left: 3px solid #4ecca3; }
+        .compare-match-title { font-size: 0.9em; color: #fff; font-weight: bold; }
+        .compare-match-info { font-size: 0.8em; color: #aaa; margin-top: 4px; }
+        .compare-new { border-left-color: #ffd700; }
+
+        .compare-fab { position: fixed; bottom: 20px; right: 20px; background: #7c3aed; color: #fff; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 1.4em; cursor: pointer; box-shadow: 0 4px 12px rgba(124,58,237,0.4); z-index: 50; }
+        .compare-fab:hover { background: #6d28d9; transform: scale(1.05); }
+
+        .stats { text-align: center; padding: 8px; color: #666; font-size: 0.8em; }
+
+        .card-img-tooltip { position: fixed; z-index: 200; pointer-events: none; display: none; }
+        .card-img-tooltip img { width: 200px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+
+        @media (max-width: 600px) {
+            .tab { font-size: 0.75em; padding: 10px 4px; }
+            header h1 { font-size: 1.3em; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔮 MTG Combo Finder</h1>
+        <p class="subtitle">Scopri, studia e inventa combo</p>
+    </header>
+
+    <div class="tab-bar">
+        <div class="tab active" data-tab="patterns">Pattern</div>
+        <div class="tab" data-tab="combos">Combo</div>
+        <div class="tab" data-tab="matrix">Matrice</div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Cerca carta, pattern o combo...">
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="content" id="content"></div>
+
+    <button class="compare-fab" id="compare-btn" title="Confronta una carta">⚡</button>
+
+    <div class="modal-overlay" id="compare-modal">
+        <div class="modal">
+            <h2>⚡ Confronta Carta</h2>
+            <p style="color:#aaa;font-size:0.85em;margin-bottom:12px;">Inserisci il nome di una carta per scoprire in quali combo/pattern puo entrare</p>
+            <input type="text" id="compare-input" placeholder="Es: Pestermite, Kiki-Jiki, Intruder Alarm...">
+            <button class="modal-btn" id="compare-go">Confronta</button>
+            <div class="compare-results" id="compare-results"></div>
+            <br>
+            <button class="modal-btn" style="background:#2d2d44;" id="compare-close">Chiudi</button>
+        </div>
+    </div>
+
+    <div class="card-img-tooltip" id="card-tooltip"><img src="" alt=""></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

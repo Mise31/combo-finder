@@ -1,0 +1,238 @@
+[
+  {
+    "id": "copy-untap-loop",
+    "name": "Copia + Stappa = Token Infiniti",
+    "description": "Un permanente che copia una creatura, combinato con una creatura che stappa il permanente copiante quando entra in gioco. Loop infinito di token.",
+    "result": "Token creature infiniti",
+    "slots": [
+      {
+        "role": "Copia Permanente (Enchant/Attiva)",
+        "keyword": "copy_permanent",
+        "cards": ["Splinter Twin", "Kiki-Jiki, Mirror Breaker"]
+      },
+      {
+        "role": "Creatura ETB Stappa",
+        "keyword": "etb_untap",
+        "cards": ["Pestermite", "Deceiver Exarch", "Zealous Conscripts", "Bounding Krasis", "Village Bell-Ringer", "Breaching Hippocamp", "Restoration Angel", "Felidar Guardian"]
+      }
+    ]
+  },
+  {
+    "id": "infinite-mana-untap",
+    "name": "Mana Dork + Stappa Ripetuto = Mana Infinito",
+    "description": "Una creatura che produce mana combinata con un modo per stapparla ripetutamente.",
+    "result": "Mana infinito",
+    "slots": [
+      {
+        "role": "Produce Mana (tap)",
+        "keyword": "mana_dork",
+        "cards": ["Priest of Titania", "Elvish Archdruid", "Bloom Tender", "Incubation Druid", "Karametra's Acolyte", "Marwyn, the Nurturer", "Selvala, Heart of the Wilds", "Circle of Dreams Druid"]
+      },
+      {
+        "role": "Stappa Ripetutamente",
+        "keyword": "repeatable_untap",
+        "cards": ["Staff of Domination", "Umbral Mantle", "Sword of the Paruns", "Pemmin's Aura", "Freed from the Real", "Intruder Alarm", "Thornbite Staff"]
+      }
+    ]
+  },
+  {
+    "id": "persist-combo",
+    "name": "Persist + Rimuovi Segnalini = Sacrificio Infinito",
+    "description": "Una creatura con Persist combinata con un modo per rimuovere il segnalino -1/-1 e un sac outlet.",
+    "result": "Morte/ETB/LTB infiniti",
+    "slots": [
+      {
+        "role": "Creatura con Persist",
+        "keyword": "persist",
+        "cards": ["Kitchen Finks", "Murderous Redcap", "Glen Elendra Archmage", "Puppeteer Clique", "Woodfall Primus", "Safehold Elite", "Lesser Masticore"]
+      },
+      {
+        "role": "Rimuovi Segnalino -1/-1",
+        "keyword": "remove_counter",
+        "cards": ["Vizier of Remedies", "Melira, Sylvok Outcast", "Anafenza, Kin-Tree Spirit", "Good-Fortune Unicorn", "Grumgully, the Generous", "Renata, Called to the Hunt", "Metallic Mimic"]
+      },
+      {
+        "role": "Sac Outlet (gratuito)",
+        "keyword": "free_sac",
+        "cards": ["Viscera Seer", "Carrion Feeder", "Goblin Bombardment", "Altar of Dementia", "Ashnod's Altar", "Phyrexian Altar", "Blasting Station"]
+      }
+    ]
+  },
+  {
+    "id": "flicker-etb",
+    "name": "Flicker Infinito + ETB Potente",
+    "description": "Un modo per far lampeggiare una creatura all'infinito combinato con un ETB devastante.",
+    "result": "ETB infiniti (danno, mill, token, ecc.)",
+    "slots": [
+      {
+        "role": "Flicker Engine",
+        "keyword": "flicker_engine",
+        "cards": ["Deadeye Navigator", "Eldrazi Displacer", "Thassa, Deep-Dwelling", "Conjurer's Closet", "Restoration Angel", "Felidar Guardian", "Lumbering Battlement"]
+      },
+      {
+        "role": "ETB Potente",
+        "keyword": "strong_etb",
+        "cards": ["Peregrine Drake", "Palinchron", "Great Whale", "Cloud of Faeries", "Dockside Extortionist", "Venser, Shaper Savant", "Acidic Slime", "Mulldrifter", "Eternal Witness", "Gray Merchant of Asphodel"]
+      }
+    ]
+  },
+  {
+    "id": "animate-worldgorger",
+    "name": "Animate Dead + Worldgorger Dragon = Mana Infinito",
+    "description": "Animate Dead rianima Worldgorger che esilia tutto (incluso Animate Dead), creando un loop infinito che genera mana.",
+    "result": "Mana infinito, ETB/LTB infiniti",
+    "slots": [
+      {
+        "role": "Rianima dal Cimitero (Aura)",
+        "keyword": "reanimate_aura",
+        "cards": ["Animate Dead", "Dance of the Dead", "Necromancy"]
+      },
+      {
+        "role": "Esilia Tutto Quando Entra",
+        "keyword": "exile_all_etb",
+        "cards": ["Worldgorger Dragon"]
+      },
+      {
+        "role": "Win Condition (usa mana infinito)",
+        "keyword": "mana_sink",
+        "cards": ["Ambassador Laquatus", "Walking Ballista", "Torment of Hailfire", "Comet, Stellar Pup", "Shivan Hellkite"]
+      }
+    ]
+  },
+  {
+    "id": "food-chain-exile",
+    "name": "Food Chain + Creatura dall'Esilio = Mana Infinito",
+    "description": "Food Chain esilia creature per mana, combinato con creature che si possono giocare dall'esilio.",
+    "result": "Mana creature infinito, cast infiniti",
+    "slots": [
+      {
+        "role": "Genera Mana Esiliando",
+        "keyword": "food_chain",
+        "cards": ["Food Chain"]
+      },
+      {
+        "role": "Giocabile dall'Esilio",
+        "keyword": "cast_from_exile",
+        "cards": ["Misthollow Griffin", "Eternal Scourge", "Squee, the Immortal"]
+      }
+    ]
+  },
+  {
+    "id": "dramatic-scepter",
+    "name": "Dramatic Reversal + Isochron Scepter = Stappa Infinito",
+    "description": "Isochron Scepter con Dramatic Reversal imprintata stappa tutti i mana rock, generando mana infinito.",
+    "result": "Mana infinito, storm infinito",
+    "slots": [
+      {
+        "role": "Ripeti Istantaneo",
+        "keyword": "imprint_repeat",
+        "cards": ["Isochron Scepter"]
+      },
+      {
+        "role": "Stappa Tutti i Non-Terra",
+        "keyword": "untap_all_nonland",
+        "cards": ["Dramatic Reversal", "Vitalize", "Benefactor's Draught"]
+      },
+      {
+        "role": "Mana Rocks (producono 3+ mana totale)",
+        "keyword": "mana_rocks",
+        "cards": ["Sol Ring", "Mana Crypt", "Arcane Signet", "Fellwar Stone", "Talisman of Dominance", "Izzet Signet"]
+      }
+    ]
+  },
+  {
+    "id": "thoracle-consultation",
+    "name": "Thassa's Oracle + Svuota Libreria = Vittoria Istantanea",
+    "description": "Svuota il mazzo e poi gioca Thassa's Oracle per vincere con la sua abilita ETB.",
+    "result": "Vittoria istantanea",
+    "slots": [
+      {
+        "role": "Vinci con Libreria Vuota",
+        "keyword": "win_empty_library",
+        "cards": ["Thassa's Oracle", "Laboratory Maniac", "Jace, Wielder of Mysteries"]
+      },
+      {
+        "role": "Svuota Libreria",
+        "keyword": "empty_library",
+        "cards": ["Demonic Consultation", "Tainted Pact", "Doomsday", "Paradigm Shift", "Leveler", "Mirror of Fate"]
+      }
+    ]
+  },
+  {
+    "id": "sacrifice-recursion",
+    "name": "Sacrificio + Ritorno = Loop Infinito",
+    "description": "Una creatura che si sacrifica per valore combinata con un modo per riportarla continuamente.",
+    "result": "Valore infinito (mana, carte, danno)",
+    "slots": [
+      {
+        "role": "Sac Outlet con Valore",
+        "keyword": "sac_value",
+        "cards": ["Ashnod's Altar", "Phyrexian Altar", "Goblin Bombardment", "Altar of Dementia", "Blasting Station", "Grinding Station"]
+      },
+      {
+        "role": "Ritorna dal Cimitero",
+        "keyword": "recursion",
+        "cards": ["Gravecrawler", "Reassembling Skeleton", "Bloodghast", "Nether Traitor", "Tenacious Dead", "Squee, the Immortal"]
+      },
+      {
+        "role": "Payoff / Trigger",
+        "keyword": "death_trigger",
+        "cards": ["Blood Artist", "Zulaport Cutthroat", "Cruel Celebrant", "Bastion of Remembrance", "Pitiless Plunderer", "Pawn of Ulamog"]
+      }
+    ]
+  },
+  {
+    "id": "enter-the-infinite",
+    "name": "Pesca Tutto + Win Condition",
+    "description": "Un effetto che pesca tutto il mazzo combinato con una win condition dalla mano.",
+    "result": "Vittoria (hai tutte le carte in mano)",
+    "slots": [
+      {
+        "role": "Pesca Tutto il Mazzo",
+        "keyword": "draw_all",
+        "cards": ["Enter the Infinite", "Omniscience", "Mind Over Matter", "Dream Halls", "Necropotence", "Ad Nauseam"]
+      },
+      {
+        "role": "Win Condition dalla Mano",
+        "keyword": "hand_wincon",
+        "cards": ["Thassa's Oracle", "Laboratory Maniac", "Jace, Wielder of Mysteries", "Borborygmos Enraged", "Psychosis Crawler"]
+      }
+    ]
+  },
+  {
+    "id": "stax-lock",
+    "name": "Lock Simmetrico + Rottura Simmetria",
+    "description": "Un effetto che blocca tutti combinato con un modo per aggirarlo solo per te.",
+    "result": "Lock: solo tu puoi giocare",
+    "slots": [
+      {
+        "role": "Lock Simmetrico",
+        "keyword": "symmetric_lock",
+        "cards": ["Stasis", "Winter Orb", "Static Orb", "Smokestack", "Contamination", "Blood Moon", "Null Rod"]
+      },
+      {
+        "role": "Rompi Simmetria",
+        "keyword": "break_symmetry",
+        "cards": ["Teferi, Temporal Archmage", "Derevi, Empyrial Tactician", "Urza, Lord High Artificer", "Chromatic Lantern", "Dockside Extortionist", "Bitterblossom", "Squee, Goblin Nabob"]
+      }
+    ]
+  },
+  {
+    "id": "intruder-alarm-tokens",
+    "name": "Intruder Alarm + Crea Token = Creature Infinite",
+    "description": "Intruder Alarm stappa tutte le creature quando una entra. Con una creatura che crea token tappandosi, loop infinito.",
+    "result": "Token infiniti, mana infinito",
+    "slots": [
+      {
+        "role": "Stappa Quando Creatura Entra",
+        "keyword": "untap_on_creature_etb",
+        "cards": ["Intruder Alarm"]
+      },
+      {
+        "role": "Crea Token Tappandosi",
+        "keyword": "tap_make_token",
+        "cards": ["Presence of Gond", "Imperious Perfect", "Lys Alana Huntmaster", "Steward of Solidarity", "Thraben Doomsayer", "Kiki-Jiki, Mirror Breaker", "Splinter Twin"]
+      }
+    ]
+  }
+]
