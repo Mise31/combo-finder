@@ -26,11 +26,12 @@ function updateStats() {
 
 function render() {
     const search = document.getElementById('search').value.toLowerCase();
+    const formatFilter = document.getElementById('format-filter').value;
     const content = document.getElementById('content');
 
-    if (currentTab === 'patterns') renderPatterns(content, search);
-    else if (currentTab === 'combos') renderCombos(content, search);
-    else if (currentTab === 'matrix') renderMatrix(content, search);
+    if (currentTab === 'patterns') renderPatterns(content, search, formatFilter);
+    else if (currentTab === 'combos') renderCombos(content, search, formatFilter);
+    else if (currentTab === 'matrix') renderMatrix(content, search, formatFilter);
 }
 
 function renderPatterns(container, search) {
@@ -39,6 +40,7 @@ function renderPatterns(container, search) {
         filtered = patterns.filter(p =>
             p.name.toLowerCase().includes(search) ||
             p.description.toLowerCase().includes(search) ||
+            (p.formats || []).some(f => f.toLowerCase().includes(search)) ||
             p.slots.some(s => s.cards.some(c => c.toLowerCase().includes(search)))
         );
     }
@@ -48,6 +50,7 @@ function renderPatterns(container, search) {
             <div class="pattern-name">${p.name}</div>
             <div class="pattern-desc">${p.description}</div>
             <div class="pattern-result">🏆 ${p.result}</div>
+            <div class="pattern-formats">${(p.formats || []).map(f => `<span class="fmt-badge fmt-${f}">${f}</span>`).join('')}</div>
             <div class="slots">
                 ${p.slots.map(s => `
                     <div class="slot">
@@ -62,10 +65,14 @@ function renderPatterns(container, search) {
     `).join('');
 }
 
-function renderCombos(container, search) {
+function renderCombos(container, search, formatFilter) {
     // Generate all specific combos from patterns
+    let sourcePatterns = patterns;
+    if (formatFilter) {
+        sourcePatterns = sourcePatterns.filter(p => (p.formats || []).includes(formatFilter));
+    }
     let combos = [];
-    patterns.forEach(p => {
+    sourcePatterns.forEach(p => {
         if (p.slots.length === 2) {
             p.slots[0].cards.forEach(a => {
                 p.slots[1].cards.forEach(b => {
@@ -101,10 +108,14 @@ function renderCombos(container, search) {
         `).join('');
 }
 
-function renderMatrix(container, search) {
+function renderMatrix(container, search, formatFilter) {
     // Show matrix view: for each pattern with 2 slots, show a grid
     let html = '';
-    patterns.filter(p => p.slots.length === 2).forEach(p => {
+    let matrixPatterns = patterns.filter(p => p.slots.length === 2);
+    if (formatFilter) {
+        matrixPatterns = matrixPatterns.filter(p => (p.formats || []).includes(formatFilter));
+    }
+    matrixPatterns.forEach(p => {
         const slotA = p.slots[0];
         const slotB = p.slots[1];
 
@@ -259,6 +270,7 @@ async function compareCard(cardName) {
 
 // === EVENT LISTENERS ===
 document.getElementById('search').addEventListener('input', render);
+document.getElementById('format-filter').addEventListener('change', render);
 
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
