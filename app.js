@@ -321,5 +321,116 @@ document.addEventListener('mouseout', (e) => {
     }
 });
 
+// === COPY / SCREENSHOT ===
+document.getElementById('copy-btn').addEventListener('click', () => {
+    document.getElementById('copy-modal').classList.add('active');
+    document.getElementById('copy-feedback').style.display = 'none';
+});
+
+document.getElementById('copy-close').addEventListener('click', () => {
+    document.getElementById('copy-modal').classList.remove('active');
+});
+
+document.getElementById('copy-text-btn').addEventListener('click', () => {
+    const content = document.getElementById('content').innerText;
+    navigator.clipboard.writeText(content).then(() => {
+        const fb = document.getElementById('copy-feedback');
+        fb.textContent = '✓ Testo copiato negli appunti!';
+        fb.style.display = 'block';
+    }).catch(() => {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = document.getElementById('content').innerText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const fb = document.getElementById('copy-feedback');
+        fb.textContent = '✓ Testo copiato!';
+        fb.style.display = 'block';
+    });
+});
+
+document.getElementById('copy-screenshot-btn').addEventListener('click', async () => {
+    const fb = document.getElementById('copy-feedback');
+    fb.textContent = 'Cattura in corso...';
+    fb.style.display = 'block';
+
+    try {
+        // Use html2canvas-like approach via canvas
+        const content = document.querySelector('body');
+        const canvas = await htmlToCanvas(content);
+        canvas.toBlob(async (blob) => {
+            if (navigator.share && navigator.canShare && navigator.canShare({files: [new File([blob], 'combo.png', {type: 'image/png'})]})) {
+                // Mobile: use share API
+                const file = new File([blob], 'combo-finder.png', {type: 'image/png'});
+                await navigator.share({files: [file], title: 'MTG Combo Finder'});
+                fb.textContent = '✓ Condiviso!';
+            } else {
+                // Desktop: download
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'combo-finder-screenshot.png';
+                a.click();
+                URL.revokeObjectURL(url);
+                fb.textContent = '✓ Screenshot salvato!';
+            }
+        }, 'image/png');
+    } catch (e) {
+        fb.textContent = 'Errore: ' + e.message;
+    }
+});
+
+// Simple html-to-canvas using native API
+async function htmlToCanvas(element) {
+    // Try native screenshot API first
+    if (window.ClipboardItem && navigator.clipboard.write) {
+        // Use a simpler approach: capture visible area
+    }
+    // Fallback: create canvas from DOM
+    const rect = element.getBoundingClientRect();
+    const canvas = document.createElement('canvas');
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = Math.min(rect.width * scale, 1440);
+    canvas.height = Math.min(rect.height * scale, 2560);
+    const ctx = canvas.getContext('2d');
+
+    // Draw background
+    ctx.fillStyle = '#0f0f1a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Convert to SVG foreignObject and draw
+    const data = new XMLSerializer().serializeToString(element);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}">
+        <foreignObject width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml">${element.outerHTML}</div>
+        </foreignObject>
+    </svg>`;
+
+    const img = new Image();
+    const blob = new Blob([svg], {type: 'image/svg+xml;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+
+    return new Promise((resolve, reject) => {
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            resolve(canvas);
+        };
+        img.onerror = () => {
+            // If SVG approach fails, just create a text-based screenshot
+            ctx.fillStyle = '#e0e0e0';
+            ctx.font = '14px sans-serif';
+            const lines = element.innerText.split('\n').slice(0, 50);
+            lines.forEach((line, i) => {
+                ctx.fillText(line.slice(0, 80), 10, 20 + i * 18);
+            });
+            resolve(canvas);
+        };
+        img.src = url;
+    });
+}
+
 // Init
 init();
