@@ -32,6 +32,7 @@ function render() {
 
     if (currentTab === 'patterns') renderPatterns(content, search, formatFilter);
     else if (currentTab === 'combos') renderCombos(content, search, formatFilter);
+    else if (currentTab === 'commanders') renderCommanders(content, search, formatFilter);
     else if (currentTab === 'matrix') renderMatrix(content, search, formatFilter);
 }
 
@@ -58,6 +59,44 @@ function renderPatterns(container, search) {
                         <div class="slot-label">${s.role}</div>
                         <div class="slot-cards">
                             ${s.cards.map(c => `<span class="slot-card" data-card="${c}">${c}</span>`).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCommanders(container, search, formatFilter) {
+    let cmdPatterns = patterns.filter(p => (p.category === 'Combo Commander') || (p.slots && p.slots.some(s => s.role && s.role.toLowerCase().includes('commander'))));
+    if (formatFilter) {
+        cmdPatterns = cmdPatterns.filter(p => (p.formats || []).includes(formatFilter));
+    }
+    if (search) {
+        cmdPatterns = cmdPatterns.filter(p =>
+            p.name.toLowerCase().includes(search) ||
+            p.description.toLowerCase().includes(search) ||
+            p.slots.some(s => s.cards.some(c => c.toLowerCase().includes(search)))
+        );
+    }
+
+    if (!cmdPatterns.length) {
+        container.innerHTML = '<p style="text-align:center;color:#666;padding:40px;">Nessun commander combo trovato. Prova a cercare un nome (es: Kinnan, Najeela, Godo...)</p>';
+        return;
+    }
+
+    container.innerHTML = cmdPatterns.map(p => `
+        <div class="pattern-card">
+            <div class="pattern-name">${p.name}</div>
+            <div class="pattern-desc">${p.description}</div>
+            <div class="pattern-result">🏆 ${p.result}</div>
+            <div class="pattern-formats">${(p.formats || []).map(f => '<span class="fmt-badge fmt-' + f + '">' + f + '</span>').join('')}</div>
+            <div class="slots">
+                ${p.slots.map(s => `
+                    <div class="slot">
+                        <div class="slot-label">${s.role}</div>
+                        <div class="slot-cards">
+                            ${s.cards.map(c => '<span class="slot-card" data-card="' + c + '">' + c + '</span>').join('')}
                         </div>
                     </div>
                 `).join('')}
