@@ -11,7 +11,8 @@ async function init() {
         patterns = [];
     }
     updateStats();
-    render();
+    // Don't render anything at start - wait for user to search
+    document.getElementById('content').innerHTML = '<p style="text-align:center;color:#666;padding:40px 20px;font-size:0.95em;">Inserisci il nome di una carta e premi <strong style="color:#7c3aed;">Ricerca</strong> per trovare combo e pattern.</p>';
 }
 
 function updateStats() {
@@ -269,8 +270,11 @@ async function compareCard(cardName) {
 }
 
 // === EVENT LISTENERS ===
-document.getElementById('search').addEventListener('input', render);
+document.getElementById('search-btn').addEventListener('click', render);
 document.getElementById('format-filter').addEventListener('change', render);
+document.getElementById('search').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') render();
+});
 
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {

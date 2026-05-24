@@ -99,7 +99,10 @@
     </div>
 
     <div class="search-box">
-        <input type="text" id="search" placeholder="Cerca carta, pattern o combo...">
+        <div style="display:flex;gap:8px;">
+            <input type="text" id="search" placeholder="Scrivi il nome di una carta..." style="flex:1;">
+            <button id="search-btn" style="padding:10px 18px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:0.9em;cursor:pointer;white-space:nowrap;">Ricerca</button>
+        </div>
         <select id="format-filter" style="width:100%;margin-top:8px;padding:8px;border:1px solid #2d2d44;border-radius:8px;background:#0f0f1a;color:#e0e0e0;font-size:0.9em;">
             <option value="">Tutti i formati</option>
             <option value="standard">Standard</option>
