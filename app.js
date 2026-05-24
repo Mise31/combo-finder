@@ -1,6 +1,30 @@
 let patterns = [];
 let currentTab = 'patterns';
+let currentLang = 'it';
 const SCRYFALL_API = 'https://api.scryfall.com/cards/named';
+
+const i18n = {
+    it: { search: 'Scrivi il nome di una carta...', searchBtn: 'Ricerca', allFormats: 'Tutti i formati', result: 'Risultato', steps: 'Come funziona:', step_play: 'Gioca', step_with: 'con', step_activate: 'Attiva', step_combo: 'Combinali insieme', step_result: 'Risultato', noResults: 'Nessun risultato. Prova un altro nome.', startMsg: 'Inserisci il nome di una carta e premi <strong style="color:#7c3aed;">Ricerca</strong> per trovare combo e pattern.', patterns: 'Pattern', combos: 'Combo', commanders: 'Commander', matrix: 'Matrice' },
+    en: { search: 'Type a card name...', searchBtn: 'Search', allFormats: 'All formats', result: 'Result', steps: 'How it works:', step_play: 'Play', step_with: 'with', step_activate: 'Activate', step_combo: 'Combine them', step_result: 'Result', noResults: 'No results. Try another name.', startMsg: 'Type a card name and press <strong style="color:#7c3aed;">Search</strong> to find combos and patterns.', patterns: 'Patterns', combos: 'Combos', commanders: 'Commander', matrix: 'Matrix' },
+    es: { search: 'Escribe el nombre de una carta...', searchBtn: 'Buscar', allFormats: 'Todos los formatos', result: 'Resultado', steps: 'Cómo funciona:', step_play: 'Juega', step_with: 'con', step_activate: 'Activa', step_combo: 'Combínalos', step_result: 'Resultado', noResults: 'Sin resultados. Prueba otro nombre.', startMsg: 'Escribe el nombre de una carta y pulsa <strong style="color:#7c3aed;">Buscar</strong> para encontrar combos.', patterns: 'Patrones', combos: 'Combos', commanders: 'Commander', matrix: 'Matriz' },
+    de: { search: 'Kartenname eingeben...', searchBtn: 'Suchen', allFormats: 'Alle Formate', result: 'Ergebnis', steps: 'So funktioniert es:', step_play: 'Spiele', step_with: 'mit', step_activate: 'Aktiviere', step_combo: 'Kombiniere sie', step_result: 'Ergebnis', noResults: 'Keine Ergebnisse. Versuche einen anderen Namen.', startMsg: 'Gib einen Kartennamen ein und drücke <strong style="color:#7c3aed;">Suchen</strong> um Combos zu finden.', patterns: 'Muster', combos: 'Combos', commanders: 'Commander', matrix: 'Matrix' },
+    fr: { search: 'Tapez un nom de carte...', searchBtn: 'Rechercher', allFormats: 'Tous les formats', result: 'Résultat', steps: 'Comment ça marche:', step_play: 'Jouez', step_with: 'avec', step_activate: 'Activez', step_combo: 'Combinez-les', step_result: 'Résultat', noResults: 'Aucun résultat. Essayez un autre nom.', startMsg: 'Tapez un nom de carte et appuyez sur <strong style="color:#7c3aed;">Rechercher</strong> pour trouver des combos.', patterns: 'Patterns', combos: 'Combos', commanders: 'Commander', matrix: 'Matrice' }
+};
+
+function t(key) { return i18n[currentLang][key] || i18n['en'][key] || key; }
+
+function generateSteps(pattern) {
+    if (pattern.steps && pattern.steps.length) return pattern.steps;
+    // Auto-generate steps from slots
+    const lang = currentLang;
+    const steps = [];
+    pattern.slots.forEach((slot, i) => {
+        const example = slot.cards[0] || '?';
+        steps.push(`${t('step_play')} ${example} (${slot.role})`);
+    });
+    steps.push(`${t('step_combo')} → ${pattern.result}`);
+    return steps;
+}
 
 // Load data
 async function init() {
@@ -12,7 +36,7 @@ async function init() {
     }
     updateStats();
     // Don't render anything at start - wait for user to search
-    document.getElementById('content').innerHTML = '<p style="text-align:center;color:#666;padding:40px 20px;font-size:0.95em;">Inserisci il nome di una carta e premi <strong style="color:#7c3aed;">Ricerca</strong> per trovare combo e pattern.</p>';
+    document.getElementById('content').innerHTML = '<p style="text-align:center;color:#666;padding:40px 20px;font-size:0.95em;">' + t('startMsg') + '</p>';
 }
 
 function updateStats() {
@@ -63,6 +87,12 @@ function renderPatterns(container, search) {
                     </div>
                 `).join('')}
             </div>
+            <div style="margin-top:10px;padding:10px;background:#0f0f1a;border-radius:6px;border-left:3px solid #7c3aed;">
+                <div style="font-size:0.75em;color:#7c3aed;font-weight:bold;margin-bottom:6px;">${t('steps')}</div>
+                <ol style="padding-left:18px;font-size:0.8em;color:#ccc;line-height:1.6;">
+                    ${generateSteps(p).map(s => `<li>${s}</li>`).join('')}
+                </ol>
+            </div>
         </div>
     `).join('');
 }
@@ -100,6 +130,12 @@ function renderCommanders(container, search, formatFilter) {
                         </div>
                     </div>
                 `).join('')}
+            </div>
+            <div style="margin-top:10px;padding:10px;background:#0f0f1a;border-radius:6px;border-left:3px solid #7c3aed;">
+                <div style="font-size:0.75em;color:#7c3aed;font-weight:bold;margin-bottom:6px;">${t('steps')}</div>
+                <ol style="padding-left:18px;font-size:0.8em;color:#ccc;line-height:1.6;">
+                    ${generateSteps(p).map(s => '<li>' + s + '</li>').join('')}
+                </ol>
             </div>
         </div>
     `).join('');
@@ -313,6 +349,17 @@ document.getElementById('search-btn').addEventListener('click', render);
 document.getElementById('format-filter').addEventListener('change', render);
 document.getElementById('search').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') render();
+});
+document.getElementById('lang-select').addEventListener('change', (e) => {
+    currentLang = e.target.value;
+    document.getElementById('search').placeholder = t('search');
+    document.getElementById('search-btn').textContent = t('searchBtn');
+    // Update tab labels
+    document.querySelectorAll('.tab').forEach(tab => {
+        const key = tab.dataset.tab;
+        if (i18n[currentLang][key]) tab.textContent = i18n[currentLang][key];
+    });
+    render();
 });
 
 document.querySelectorAll('.tab').forEach(tab => {
